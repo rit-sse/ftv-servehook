@@ -1,0 +1,23 @@
+{
+  "name": "ftv-servehook",
+  "version": "1.0.0",
+  "description": "I don't know what a servehook is. Do you?",
+  "main": "servehook.js",
+  "scripts": {
+    "start": "node servehook.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/rit-sse/ftv-servehook"
+  },
+  "author": "Kristen Mills, Michael Timbrook, and Craig Cabrey",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/rit-sse/ftv-servehook/issues"
+  },
+  "homepage": "https://github.com/rit-sse/ftv-servehook",
+  "dependencies": {
+    "express": "^4.12.3"
+  }
+}

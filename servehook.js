@@ -1,6 +1,11 @@
 var express = require('express');
 var app = express();
 
+app.set('port', process.env.PORT || 8000);
+var server = app.listen(app.get('port'));
+
+var io = require('socket.io')(server);
+
 var state = {
   currentUsers: [],
   allowed: true,
@@ -10,7 +15,9 @@ var state = {
 function handleSending() {
   if(state.currentUsers.length > 1) {
     console.log("WE'RE READY!!!");
-    //DO STUFF
+    Array.prototype.forEach.call(io.sockets.sockets, function(socket) {
+      socket.emit('tour');
+    });
     state.allowed = false;
     setTimeout(function(){
       state.allowed = true;
@@ -34,19 +41,18 @@ function checkLocation (loc) {
 
 app.get('/', function(req, res, next) {
   var user = req.query.username;
+  console.log(req.query);
   if(req.query.location && state.currentUsers.indexOf(user) === -1 && state.allowed){
     var location = req.query.location.split(';');
+    console.log(checkLocation(location));
     if (checkLocation(location)) {
       console.log('added user', user);
       state.currentUsers.push(user);
-    }
-
-    if(!state.currentlyChecking) {
-      state.currentlyChecking = true;
-      setTimeout(handleSending, 6*1000);
+      if(!state.currentlyChecking) {
+        state.currentlyChecking = true;
+        setTimeout(handleSending, 6*1000);
+      }
     }
   }
   res.send();
 });
-app.set('port', process.env.PORT || 8000);
-app.listen(app.get('port'));

@@ -6,22 +6,34 @@ var server = app.listen(app.get('port'));
 
 var io = require('socket.io')(server);
 
+var sockets = [];
+
+io.on('connection', function(socket){
+  sockets.push(socket);
+  console.log('client connected');
+  socket.on('disconnect', function() {
+    sockets.splice(sockets.indexOf(socket), 1);
+  });
+});
+
 var state = {
   currentUsers: [],
   allowed: true,
   currentlyChecking: false
 }
 
+
+
 function handleSending() {
   if(state.currentUsers.length > 1) {
     console.log("WE'RE READY!!!");
-    Array.prototype.forEach.call(io.sockets.sockets, function(socket) {
+    sockets.forEach(function(socket) {
       socket.emit('tour');
     });
     state.allowed = false;
     setTimeout(function(){
       state.allowed = true;
-    }, 15000);
+    }, 30000);
   } else {
     console.log('failure');
   }

@@ -18,7 +18,7 @@ function handleSending() {
   } else {
     console.log('failure');
   }
-
+  state.currentlyChecking = false;
   state.currentUsers = [];
 }
 
